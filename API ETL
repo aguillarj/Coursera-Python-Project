@@ -1,0 +1,103 @@
+Skills Network Logo
+
+Peer Review Assignment - Data Engineer - Extract API Data
+Estimated time needed: 20 minutes
+
+Objectives
+In this part you will:
+
+Collect exchange rate data using an API
+Store the data as a CSV
+For this lab, we are going to be using Python and several Python libraries. Some of these libraries might be installed in your lab environment or in SN Labs. Others may need to be installed by you. The cells below will install these libraries when executed.
+
+#!mamba install pandas==1.3.3 -y
+#!mamba install requests==2.26.0 -y
+Imports
+Import any additional libraries you may need here.
+
+import requests
+import pandas as pd
+import json
+Extract Data Using an API
+Using ExchangeRate-API we will extract currency exchange rate data. Use the below steps to get the access key and to get the data.
+
+Open the url : https://exchangeratesapi.io/ and click on Get Free API Key.
+Subscribe for Free plan and Sign-in with the Google Account.
+Once the account is created you will be redirected to https://apilayer.com website.
+Now, click on the user icon and click Account as shown below:
+Image
+Scroll down and you will get the API Key section. Copy the API key and use in the url in Question 1.
+Call the API
+Question 1 Using the requests library call the endpoint given above and save the text, remember the first few characters of the output:
+
+# Write your code here
+url = "https://api.apilayer.com/exchangerates_data/latest?base=EUR&apikey=3wDfZ9wpGYypPJyT5OO9ybYd5ofZ4Flm" #Make sure to change ******* to your API key.
+data = requests.get(url)
+data
+<Response [200]>
+Save as DataFrame
+Question 2 Using the data gathered turn it into a pandas dataframe. The dataframe should have the Currency as the index and Rate as their columns. Make sure to drop unnecessary columns.
+
+#Turn the data into a dataframe
+import json
+results = json.loads(data.text)
+print("json loaded")
+data_df = pd.DataFrame(results)
+data_df
+json loaded
+success	timestamp	base	date	rates
+AED	True	1689894244	EUR	2023-07-20	4.089837
+AFN	True	1689894244	EUR	2023-07-20	97.425892
+ALL	True	1689894244	EUR	2023-07-20	99.870350
+AMD	True	1689894244	EUR	2023-07-20	430.116732
+ANG	True	1689894244	EUR	2023-07-20	2.006926
+...	...	...	...	...	...
+YER	True	1689894244	EUR	2023-07-20	278.695966
+ZAR	True	1689894244	EUR	2023-07-20	19.961642
+ZMK	True	1689894244	EUR	2023-07-20	10022.399215
+ZMW	True	1689894244	EUR	2023-07-20	21.464730
+ZWL	True	1689894244	EUR	2023-07-20	358.532234
+170 rows × 5 columns
+
+# Drop unnescessary columns
+data_df = data_df.drop(columns = ['success', 'timestamp', 'base', 'date'])
+data_df
+rates
+AED	4.089837
+AFN	97.425892
+ALL	99.870350
+AMD	430.116732
+ANG	2.006926
+...	...
+YER	278.695966
+ZAR	19.961642
+ZMK	10022.399215
+ZMW	21.464730
+ZWL	358.532234
+170 rows × 1 columns
+
+Load the Data
+Using the dataframe save it as a CSV names exchange_rates_1.csv.
+
+# Save the Dataframe
+data_df.to_csv("exchange_rates_1.csv")
+Your CSV should be in this format with more currencies
+
+Rates
+AED	4.398618
+AFN	92.917693
+ALL	123.099093
+AMD	621.935674
+ANG	2.149648
+Authors
+Ramesh Sannareddy, Joseph Santarcangelo and Azim Hirjani
+
+Other Contributors
+Rav Ahuja
+
+Change Log
+Date (YYYY-MM-DD)	Version	Changed By	Change Description
+2022-05-06	0.3	Malika	Updated instructions to get the API and the url
+2021-04-15	0.2	Malika	Updated the lab from USD to EUR
+2020-11-25	0.1	Ramesh Sannareddy	Created initial version of the lab
+Copyright © 2020 IBM Corporation. This notebook and its source code are released under the terms of the MIT License.
