@@ -1,0 +1,182 @@
+Peer Review Assignment - Data Engineer - Webscraping
+Estimated time needed: 20 minutes
+
+Objectives
+In this part you will:
+
+Use webscraping to get bank information
+For this lab, we are going to be using Python and several Python libraries. Some of these libraries might be installed in your lab environment or in SN Labs. Others may need to be installed by you. The cells below will install these libraries when executed.
+
+#!mamba install pandas==1.3.3 -y
+#!mamba install requests==2.26.0 -y
+!mamba install bs4==4.10.0 -y
+!mamba install html5lib==1.1 -y
+
+                  __    __    __    __
+                 /  \  /  \  /  \  /  \
+                /    \/    \/    \/    \
+███████████████/  /██/  /██/  /██/  /████████████████████████
+              /  / \   / \   / \   / \  \____
+             /  /   \_/   \_/   \_/   \    o \__,
+            / _/                       \_____/  `
+            |/
+        ███╗   ███╗ █████╗ ███╗   ███╗██████╗  █████╗
+        ████╗ ████║██╔══██╗████╗ ████║██╔══██╗██╔══██╗
+        ██╔████╔██║███████║██╔████╔██║██████╔╝███████║
+        ██║╚██╔╝██║██╔══██║██║╚██╔╝██║██╔══██╗██╔══██║
+        ██║ ╚═╝ ██║██║  ██║██║ ╚═╝ ██║██████╔╝██║  ██║
+        ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝
+
+        mamba (1.4.2) supported by @QuantStack
+
+        GitHub:  https://github.com/mamba-org/mamba
+        Twitter: https://twitter.com/QuantStack
+
+█████████████████████████████████████████████████████████████
+
+
+Looking for: ['bs4==4.10.0']
+
+[+] 0.0s
+[+] 0.1s
+pkgs/main/linux-64 ━━━━━━━━━━━━━╸━━━━━━━━━━━   0.0 B /  ??.?MB @  ??.?MB/s  0.1s
+pkgs/main/noarch   ━━━━━━━━━╸━━━━━━━━━━━━━━━   0.0 B /  ??.?MB @  ??.?MB/s  0.1s
+pkgs/r/linux-64    ━━━━━━━━╸━━━━━━━━━━━━━━━━   0.0 B /  ??.?MB @  ??.?MB/s  0.1s
+pkgs/r/noarch      ━━━━━━━━━━━━━╸━━━━━━━━━━━   0.0 B /  ??.?MB @  ??.?MB/s  0.1spkgs/main/noarch                                              No change
+pkgs/main/linux-64                                            No change
+pkgs/r/linux-64                                               No change
+pkgs/r/noarch                                                 No change
+
+Pinned packages:
+  - python 3.7.*
+
+
+Transaction
+
+  Prefix: /home/jupyterlab/conda/envs/python
+
+  All requested packages already installed
+
+
+                  __    __    __    __
+                 /  \  /  \  /  \  /  \
+                /    \/    \/    \/    \
+███████████████/  /██/  /██/  /██/  /████████████████████████
+              /  / \   / \   / \   / \  \____
+             /  /   \_/   \_/   \_/   \    o \__,
+            / _/                       \_____/  `
+            |/
+        ███╗   ███╗ █████╗ ███╗   ███╗██████╗  █████╗
+        ████╗ ████║██╔══██╗████╗ ████║██╔══██╗██╔══██╗
+        ██╔████╔██║███████║██╔████╔██║██████╔╝███████║
+        ██║╚██╔╝██║██╔══██║██║╚██╔╝██║██╔══██╗██╔══██║
+        ██║ ╚═╝ ██║██║  ██║██║ ╚═╝ ██║██████╔╝██║  ██║
+        ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝ ╚═╝  ╚═╝
+
+        mamba (1.4.2) supported by @QuantStack
+
+        GitHub:  https://github.com/mamba-org/mamba
+        Twitter: https://twitter.com/QuantStack
+
+█████████████████████████████████████████████████████████████
+
+
+Looking for: ['html5lib==1.1']
+
+pkgs/main/linux-64                                          Using cache
+pkgs/main/noarch                                            Using cache
+pkgs/r/linux-64                                             Using cache
+pkgs/r/noarch                                               Using cache
+
+Pinned packages:
+  - python 3.7.*
+
+
+Transaction
+
+  Prefix: /home/jupyterlab/conda/envs/python
+
+  All requested packages already installed
+
+Imports
+Import any additional libraries you may need here.
+
+from bs4 import BeautifulSoup
+import html5lib
+import requests
+import pandas as pd
+Extract Data Using Web Scraping
+The wikipedia webpage https://web.archive.org/web/20200318083015/https://en.wikipedia.org/wiki/List_of_largest_banks provides information about largest banks in the world by various parameters. Scrape the data from the table 'By market capitalization' and store it in a JSON file.
+
+Webpage Contents
+Gather the contents of the webpage in text format using the requests library and assign it to the variable html_data
+
+#Write your code here
+url = 'https://web.archive.org/web/20200318083015/https://en.wikipedia.org/wiki/List_of_largest_banks'
+source_data = requests.get(url)
+html_data = source_data.text
+print(source_data.content[:100])
+print(source_data.status_code)
+​
+​
+​
+b'<!DOCTYPE html>\n<html class="client-nojs" lang="en" dir="ltr">\n<head><script type="text/javascript" '
+200
+Question 1 Print out the output of the following line, and remember it as it will be a quiz question:
+
+[760:783]
+html_data[760:783]
+'List of largest banks -'
+Scraping the Data
+Question 2 Using the contents and beautiful soup load the data from the By market capitalization table into a pandas dataframe. The dataframe should have the bank Name and Market Cap (US$ Billion) as column names. Display the first five rows using head.
+
+Using BeautifulSoup parse the contents of the webpage.
+
+#Replace the dots below
+soup = BeautifulSoup(html_data, 'html.parser')
+​
+Load the data from the By market capitalization table into a pandas dataframe. The dataframe should have the bank Name and Market Cap (US$ Billion) as column names. Using the empty dataframe data and the given loop extract the necessary data from each row and append it to the empty dataframe.
+
+he market cap table
+data = pd.DataFrame(columns=["Name", "Market Cap (US$ Billion)"])
+​
+​
+for row in soup.find_all('tbody')[2].find_all('tr'): #iterate through the rows in the market cap table
+    col = row.find_all('td')
+    #Write your code here
+    if col: 
+        bank_name = col[1].find_all("a")[1].text #create bank name variable, set value to first item in row
+        market_cap = float(col[2].text) #create market cap variable, set to second value in row
+        data = data.append({"Name": bank_name,
+                            "Market Cap (US$ Billion)": market_cap},
+                           ignore_index=True) #append two values to dataframe
+            
+Question 3 Display the first five rows using the head function.
+
+#Write your code here
+data.head()
+Name	Market Cap (US$ Billion)
+0	JPMorgan Chase	390.934
+1	Industrial and Commercial Bank of China	345.214
+2	Bank of America	325.331
+3	Wells Fargo	308.013
+4	China Construction Bank	257.399
+Loading the Data
+Load the pandas dataframe created above into a JSON named bank_market_cap.json using the to_json() function.
+
+data = 
+#Write your code here
+data = data.to_json()
+Authors
+Ramesh Sannareddy, Joseph Santarcangelo and Azim Hirjani
+
+Other Contributors
+Rav Ahuja
+
+Change Log
+Date (YYYY-MM-DD)	Version	Changed By	Change Description
+2022-07-12	0.2	Appalabhaktula Hema	Corrected the code and markdown
+2020-11-25	0.1	Ramesh Sannareddy	Created initial version of the lab
+Copyright © 2020 IBM Corporation.
+
+
